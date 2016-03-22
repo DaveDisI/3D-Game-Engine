@@ -2,12 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Repositories/Java Workspace/3D Game Engine/jars/lwjgl.jar">
+	<classpathentry kind="lib" path="C:/Users/xyz/workspace/3D-Game-Engine/jars/lwjgl.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Repositories/Java%20Workspace/3D%20Game%20Engine/doc/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Repositories/Java Workspace/3D Game Engine/natives"/>
+			<attribute name="javadoc_location" value="file:/C:/Users/xyz/workspace/3D-Game-Engine/doc/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/xyz/workspace/3D-Game-Engine/natives"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Repositories/Java Workspace/3D Game Engine/jars/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="C:/Users/xyz/workspace/3D-Game-Engine/jars/lwjgl_util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

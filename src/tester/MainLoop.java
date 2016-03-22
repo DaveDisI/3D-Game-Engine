@@ -1,5 +1,8 @@
 package tester;
 
+import org.lwjgl.util.vector.Vector3f;
+
+import entity.Entity;
 import models.RawModel;
 import models.TexturedModel;
 import render_engine.Display;
@@ -43,10 +46,13 @@ public class MainLoop {
 		ModelTexture texture = new ModelTexture(loader.loadTexture("building.jpg"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
+		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
+		
 		while(!Display.isCloseRequested()){
+			entity.increasePosition(0, 0, 0);
 			renderer.prepare();
 			shader.start();
-			renderer.render(texturedModel);
+			renderer.render(entity, shader);
 			shader.stop();
 			//game logic
 			//render

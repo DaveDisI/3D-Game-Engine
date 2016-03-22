@@ -22,19 +22,29 @@ import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.nio.ByteBuffer;
+
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 public class Display {
 	private static GLFWErrorCallback errorCallback;
 	private static GLFWKeyCallback keyCallback;
-
+	
+	private static int windowWidth;
+	private static int windowHeight;
+	
 	private static long window;
 
 	public static void createDisplay(int width, int height, String title) {
+		windowWidth = width;
+		windowHeight = height;
+		
 		glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
 
 		if (glfwInit() != GLFW_TRUE) {
@@ -87,5 +97,13 @@ public class Display {
 		keyCallback.release();
 		glfwTerminate();
 		errorCallback.release();
+	}
+	
+	public static int getWidth(){
+		return windowWidth;
+	}
+	
+	public static int getHeight(){
+		return windowHeight;
 	}
 }
