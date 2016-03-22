@@ -19,9 +19,8 @@ public class MainLoop {
 		Display.createDisplay(WIDTH, HEIGHT, "GAME!!!");
 		
 		Loader loader = new Loader();
-		Renderer renderer = new Renderer();
-		
 		StaticShader shader = new StaticShader();
+		Renderer renderer = new Renderer(shader);
 		
 		float[] vertices = {
 				-0.5f, 0.5f, 0.0f,
@@ -46,16 +45,14 @@ public class MainLoop {
 		ModelTexture texture = new ModelTexture(loader.loadTexture("building.jpg"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -1), 0, 0, 0, 1);
 		
 		while(!Display.isCloseRequested()){
-			entity.increasePosition(0, 0, 0);
+			entity.increasePosition(0, 0, -0.1f);
 			renderer.prepare();
 			shader.start();
 			renderer.render(entity, shader);
 			shader.stop();
-			//game logic
-			//render
 			Display.updateDisplay();
 		}
 		

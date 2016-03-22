@@ -20,6 +20,13 @@ public class Renderer {
 	
 	private Matrix4f projectionMatrix;
 	
+	public Renderer(StaticShader shader){
+		createProjectionMatrix();
+		shader.start();
+		shader.loadProjectionMatrix(projectionMatrix);
+		shader.stop();
+	}
+	
 	public void prepare(){
 		GL11.glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -33,7 +40,6 @@ public class Renderer {
 		GL20.glEnableVertexAttribArray(1);
 		
 		Matrix4f transformationMatrix = MathUtils.createTransformationMatrix(entity.getPosition(), entity.getRotX(),entity.getRotY(), entity.getRotZ(), entity.getScale());
-		
 		shader.loadTransformationMatrix(transformationMatrix);
 		
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -45,7 +51,18 @@ public class Renderer {
 	}
 	
 	private void createProjectionMatrix(){
-		//float apectRation = (float)
+		float aspectRatio = (float)Display.getWidth() / Display.getHeight();
+		float yScale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
+		float xScale = yScale / aspectRatio;
+		float frustumLength = FAR_PLANE - NEAR_PLANE;
+		
+		projectionMatrix = new Matrix4f();
+		projectionMatrix.m00 = xScale;
+		projectionMatrix.m11 = yScale;
+		projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustumLength);
+		projectionMatrix.m23 = -1;
+		projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustumLength);
+		projectionMatrix.m33 = 0;
 	}
 	
 }

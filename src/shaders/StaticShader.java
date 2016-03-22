@@ -30,7 +30,7 @@ public class StaticShader extends ShaderProgram{
 		super.loadMatrix(transformationMatLocation, matrix);
 	}
 	
-	public void loadProjectionMatrix(Matrix4f matrix){
-		super.loadMatrix(projectionMatLocation, matrix);
+	public void loadProjectionMatrix(Matrix4f projection){
+		super.loadMatrix(projectionMatLocation, projection);
 	}
 }
