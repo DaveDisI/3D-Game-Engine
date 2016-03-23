@@ -1,3 +1,9 @@
+/entity/
+/game_utils/
+/models/
 /render_engine/
-/tester/
 /shaders/
+/tester/
+/textures/
+/terrains/
+/obj_loader/

@@ -7,8 +7,7 @@ import entity.Camera;
 import entity.Light;
 import game_utils.MathUtils;
 
-public class StaticShader extends ShaderProgram{
-	
+public class TerrainShader extends ShaderProgram{
 	private int transformationMatLocation;
 	private int projectionMatLocation;
 	private int viewMatLocation;
@@ -16,13 +15,17 @@ public class StaticShader extends ShaderProgram{
 	private int lightColorLocation;
 	private int shineDamperLocation;
 	private int reflectivityLocation;
-	private int useFakeLightingLocation;
 	private int skyColorLocation;
+	private int backgroundTextureLocation;
+	private int rTextureLocation;
+	private int gTextureLocation;
+	private int bTextureLocation;
+	private int blendMapLocation;
 	
-	private static final String VERTEX_FILE = "src/shaders/vertex_shader.vs";
-	private static final String FRAGMENT_FILE = "src/shaders/fragment_shader.fs";
+	private static final String VERTEX_FILE = "src/shaders/terrain_vertex_shader.vs";
+	private static final String FRAGMENT_FILE = "src/shaders/terrain_fragment_shader.fs";
 	
-	public StaticShader() {
+	public TerrainShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
 	
@@ -42,16 +45,24 @@ public class StaticShader extends ShaderProgram{
 		lightColorLocation = super.getUniformLocation("lightColor");
 		shineDamperLocation = super.getUniformLocation("shineDamper");
 		reflectivityLocation = super.getUniformLocation("reflectivity");
-		useFakeLightingLocation = super.getUniformLocation("useFakeLighting");
 		skyColorLocation = super.getUniformLocation("skyColor");
+		backgroundTextureLocation = super.getUniformLocation("backgroundTexture");
+		rTextureLocation = super.getUniformLocation("rTexture");
+		gTextureLocation = super.getUniformLocation("gTexture");
+		bTextureLocation = super.getUniformLocation("bTexture");
+		blendMapLocation = super.getUniformLocation("blendMap");
+	}
+	
+	public void connectTextureUnits(){
+		super.loadInt(backgroundTextureLocation, 0);
+		super.loadInt(rTextureLocation, 1);
+		super.loadInt(gTextureLocation, 2);
+		super.loadInt(bTextureLocation, 3);
+		super.loadInt(blendMapLocation, 4);
 	}
 	
 	public void loadSkyColor(float r, float g, float b){
 		super.loadVector(skyColorLocation, new Vector3f(r, g, b));
-	}
-	
-	public void loadFakeLightingVariable(boolean useFake){
-		super.loadBoolean(useFakeLightingLocation, useFake);
 	}
 	
 	public void loadShineVariables(float damper, float reflectivity){
