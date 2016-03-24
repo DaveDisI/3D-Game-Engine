@@ -47,30 +47,22 @@ public class MainLoop {
 
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 		
-		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
-		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap);
-		
-		//Terrain terrain = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("building.jpg")));
-		//Terrain terrain2 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("brick.png")));
-		
-		Camera camera = new Camera();
-		
-		camera.setPosition(new Vector3f(0, 10, 50));
+		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap.png");
 		
 		MasterRenderer renderer = new MasterRenderer();
 		
-		Player player = new Player(texturedModel, new Vector3f(0, 13.5f, 25), 0, 180, 0, 1);
+		Player player = new Player(texturedModel, new Vector3f(500,0, -500), 0, 180, 0, 1);
+		
+		Camera camera = new Camera(player);
 		
 		while(!Display.isCloseRequested()){
 			camera.move();
-			
 			player.move();
 			
 			renderer.processEntity(player);
-			
 			renderer.processTerrain(terrain);
-			renderer.processTerrain(terrain2);
 			renderer.render(light, camera);
+			
 			Display.updateDisplay();
 		}
 		

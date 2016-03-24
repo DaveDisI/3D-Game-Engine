@@ -76,12 +76,13 @@ public class Display {
 
 		GL11.glViewport(0, 0, width, height);
 		lastFrameTime = getCurrentTime();
+		InputManager.init(window);
 	}
 
 	public static void updateDisplay() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		InputManager.update(window);
+		
 		if(InputManager.escape_key){
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 		}
