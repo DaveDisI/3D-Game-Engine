@@ -28,11 +28,16 @@ public class InputManager {
 	private static int lastMouseX = 0;
 	private static int lastMouseY = 0;
 	
+	private static MousePositionCallback mousePositionCallback;
+	private static MouseScrollCallback mouseScrollCallback;
+	private static MouseButtonCallback mouseButtonCallback;
+	private static KeyCallback keyCallback;
+	
 	public static void init(long window) {
-		GLFW.glfwSetCursorPosCallback(window, new MousePositionCallback());
-		GLFW.glfwSetScrollCallback(window, new MouseScrollCallback());
-		GLFW.glfwSetKeyCallback(window, new KeyCallback());
-		GLFW.glfwSetMouseButtonCallback(window, new MouseButtonCallback());
+		GLFW.glfwSetCursorPosCallback(window, mousePositionCallback = new MousePositionCallback());
+		GLFW.glfwSetScrollCallback(window, mouseScrollCallback = new MouseScrollCallback());
+		GLFW.glfwSetKeyCallback(window, keyCallback = new KeyCallback());
+		GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
 	}
 
 	public static int getMouseDeltaX() {

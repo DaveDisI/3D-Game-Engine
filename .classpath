@@ -8,5 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Repositories/Java Workspace/3D-Game-Engine/jars/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="C:/Repositories/Java Workspace/3D-Game-Engine/jars/PNGDecoder.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

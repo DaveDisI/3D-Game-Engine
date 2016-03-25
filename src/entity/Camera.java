@@ -96,6 +96,8 @@ public class Camera {
 		if(InputManager.rightMouseButton){
 			float pitchChange = (float) (InputManager.getMouseDeltaY() * 0.1f);
 			pitch -= pitchChange;
+		}else{
+			InputManager.getMouseDeltaY();
 		}
 	}
 	
@@ -103,6 +105,8 @@ public class Camera {
 		if(InputManager.leftMouseButton){
 			float angleChange = InputManager.getMouseDeltaX() * 0.3f;
 			angleAroundPlayer -= angleChange;
+		}else{
+			InputManager.getMouseDeltaX();
 		}
 	}
 }

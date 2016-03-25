@@ -5,6 +5,7 @@ import org.lwjgl.util.vector.Vector3f;
 import game_utils.InputManager;
 import models.TexturedModel;
 import render_engine.Display;
+import terrains.Terrain;
 
 public class Player extends Entity {
 
@@ -25,7 +26,7 @@ public class Player extends Entity {
 		super(model, position, rotX, rotY, rotZ, scale);
 	}
 
-	public void move(){
+	public void move(Terrain terrain){
 		checkInputs();
 		super.increaseRotation(0, currentTurnSpeed * Display.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * Display.getFrameTimeSeconds();
@@ -36,10 +37,12 @@ public class Player extends Entity {
 		upwardsSpeed += GRAVITY * Display.getFrameTimeSeconds();
 		super.increasePosition(0, upwardsSpeed * Display.getFrameTimeSeconds(), 0);
 		
-		if(super.getPosition().y < TERRAIN_HEIGHT){
+		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
+		
+		if(super.getPosition().y < terrainHeight){
 			upwardsSpeed = 0;
 			isInAir = false;
-			super.getPosition().y = TERRAIN_HEIGHT;
+			super.getPosition().y = terrainHeight;
 		}
 	}
 	

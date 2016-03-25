@@ -6,8 +6,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import game_utils.MathUtils;
 import models.RawModel;
 import render_engine.Loader;
 import textures.ModelTexture;
@@ -19,17 +21,18 @@ public class Terrain {
 	private static final float MAX_HEIGHT = 40;
 	private static final float MIN_HEIGHT = 40;
 	private static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
-	
+
 	private float x;
 	private float z;
 	private RawModel model;
-	//private ModelTexture texture;
+
 	private TerrainTexturePack texturePack;
 	private TerrainTexture blendMap;
 
 	private float[][] heights;
-	
-	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap) {
+
+	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap,
+			String heightMap) {
 		this.texturePack = texturePack;
 		this.blendMap = blendMap;
 		this.x = gridX * SIZE;
@@ -40,17 +43,17 @@ public class Terrain {
 
 	private RawModel generateTerrain(Loader loader, String heightMap) {
 		BufferedImage image = null;
-		try{
+		try {
 			image = ImageIO.read(new File("res/" + heightMap));
-		}catch(IOException e){
+		} catch (IOException e) {
 			System.err.println("Error loading height map " + heightMap);
 			e.printStackTrace();
 		}
-		
+
 		int VERTEX_COUNT = image.getHeight();
-		
+
 		heights = new float[VERTEX_COUNT][VERTEX_COUNT];
-		
+
 		int count = VERTEX_COUNT * VERTEX_COUNT;
 		float[] vertices = new float[count * 3];
 		float[] normals = new float[count * 3];
@@ -61,13 +64,13 @@ public class Terrain {
 			for (int j = 0; j < VERTEX_COUNT; j++) {
 				float height = getHeight(j, i, image);
 				heights[j][i] = height;
-				
+
 				vertices[vertexPointer * 3] = (float) j / ((float) VERTEX_COUNT - 1) * SIZE;
 				vertices[vertexPointer * 3 + 1] = height;
 				vertices[vertexPointer * 3 + 2] = (float) i / ((float) VERTEX_COUNT - 1) * SIZE;
-				
+
 				Vector3f normal = calculateNormal(j, i, image);
-				
+
 				normals[vertexPointer * 3] = normal.x;
 				normals[vertexPointer * 3 + 1] = normal.y;
 				normals[vertexPointer * 3 + 2] = normal.z;
@@ -94,7 +97,7 @@ public class Terrain {
 		return loader.loadToVAO(vertices, textureCoords, normals, indices);
 	}
 
-	private Vector3f calculateNormal(int x, int z, BufferedImage image){
+	private Vector3f calculateNormal(int x, int z, BufferedImage image) {
 		float heightL = getHeight(x - 1, z, image);
 		float heightR = getHeight(x + 1, z, image);
 		float heightD = getHeight(x, z - 1, image);
@@ -103,9 +106,9 @@ public class Terrain {
 		normal.normalise();
 		return normal;
 	}
-	
-	private float getHeight(int x, int z, BufferedImage image){
-		if(x < 0|| x >= image.getWidth() || z < 0 || z >= image.getHeight()){
+
+	private float getHeight(int x, int z, BufferedImage image) {
+		if (x < 0 || x >= image.getWidth() || z < 0 || z >= image.getHeight()) {
 			return 0;
 		}
 		float height = image.getRGB(x, z);
@@ -114,7 +117,7 @@ public class Terrain {
 		height *= MAX_HEIGHT;
 		return height;
 	}
-	
+
 	public float getX() {
 		return x;
 	}
@@ -126,11 +129,11 @@ public class Terrain {
 	public RawModel getModel() {
 		return model;
 	}
-	
-//	public ModelTexture getTexture(){
-//		return texture;
-//	}
-	
+
+	// public ModelTexture getTexture(){
+	// return texture;
+	// }
+
 	public TerrainTexturePack getTexturePack() {
 		return texturePack;
 	}
@@ -138,19 +141,32 @@ public class Terrain {
 	public TerrainTexture getBlendMap() {
 		return blendMap;
 	}
-	
-	public float getHeightOfTerrain(float worldX, float worldZ){
+
+	public float getHeightOfTerrain(float worldX, float worldZ) {
 		float terrainX = worldX - this.x;
 		float terrainZ = worldZ - this.z;
-		float gridSquareSize = SIZE / (float) heights.length - 1;
+		float gridSquareSize = SIZE / ((float) heights.length - 1);
 		int gridX = (int) Math.floor(terrainX / gridSquareSize);
 		int gridZ = (int) Math.floor(terrainZ / gridSquareSize);
-		
-		if(gridX >= heights.length - 1 || gridZ >= heights.length - 1 || gridX < 0 || gridZ < 0){
+
+		if (gridX >= heights.length - 1 || gridZ >= heights.length - 1 || gridX < 0 || gridZ < 0) {
 			return 0;
 		}
+
+		float xCoord = (terrainX % gridSquareSize) / gridSquareSize;
+		float zCoord = (terrainZ % gridSquareSize) / gridSquareSize;
+
+		float ans = 0;
+		if (xCoord < (1 - zCoord)) {
+			ans = MathUtils.barryCentric(new Vector3f(0, heights[gridX][gridZ], 0),
+					new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(0, heights[gridX][gridZ + 1], 1),
+					new Vector2f(xCoord, zCoord));
+		} else {
+			ans = MathUtils.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0),
+					new Vector3f(1, heights[gridX + 1][gridZ + 1], 1), new Vector3f(0, heights[gridX][gridZ + 1], 1),
+					new Vector2f(xCoord, zCoord));
+		}
 		
-		float xCoord = (terrainX % gridSquareSize);
-		float xCoord = (terrainX % gridSquareSize);
+		return ans;
 	}
 }
