@@ -1,10 +1,10 @@
-package entity;
+package planet;
 
 import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
 
-public class Entity {
+public class Planet {
 	private TexturedModel model;
 	private Vector3f position;
 	private float rotX;
@@ -14,9 +14,9 @@ public class Entity {
 
 	private int textureIndex = 0;
 	
-	public Entity(){}
+	public Planet(){}
 	
-	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+	public Planet(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		this.model = model;
 		this.position = position;
 		this.rotX = rotX;
@@ -25,7 +25,7 @@ public class Entity {
 		this.scale = scale;
 	}
 	
-	public Entity(TexturedModel model, int index, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+	public Planet(TexturedModel model, int index, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		this.textureIndex = index;
 		this.model = model;
 		this.position = position;
@@ -104,6 +104,4 @@ public class Entity {
 	public void setScale(float scale) {
 		this.scale = scale;
 	}
-	
-	
 }

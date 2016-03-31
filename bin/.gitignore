@@ -1,3 +1,5 @@
-/render_engine/
-/skybox/
 /tester/
+/terrains/
+/planet/
+/render_engine/
+/shaders/

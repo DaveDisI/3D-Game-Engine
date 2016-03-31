@@ -10,12 +10,14 @@ import entity.Camera;
 import entity.Entity;
 import entity.Light;
 import entity.Player;
+import game_utils.MousePicker;
 import gui.GUIRenderer;
 import gui.GUITexture;
 import models.RawModel;
 import models.TexturedModel;
 import obj_loader.ModelData;
 import obj_loader.OBJFileLoader;
+import planet.Planet;
 import render_engine.Display;
 import render_engine.Loader;
 import render_engine.MasterRenderer;
@@ -54,6 +56,9 @@ public class MainLoop {
 
 		ModelData fernData = OBJFileLoader.loadOBJ("fern");
 		RawModel fernModel = loader.loadToVAO(fernData.getVertices(), fernData.getTextureCoords(), fernData.getNormals(), fernData.getIndices());
+		
+		
+		
 		TexturedModel fernTModel = new TexturedModel(fernModel, fernTextureAt);
 		
 		texture.setShineDamper(10);
@@ -68,9 +73,9 @@ public class MainLoop {
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap.png");
 		
 		MasterRenderer renderer = new MasterRenderer(loader);
-		
+		Planet p = new Planet(fernTModel, new Vector3f(500, terrain.getHeightOfTerrain(500, -500), -500), 0, 0, 0, 1);
 		Player player = new Player(texturedModel, new Vector3f(500, 0, -500), 0, 180, 0, 1);
-		Entity fern = new Entity(fernTModel, 0, new Vector3f(500, terrain.getHeightOfTerrain(500, -500), -500), 0, 0, 0, 1);
+		//Entity fern = new Entity(fernTModel, 0, new Vector3f(500, terrain.getHeightOfTerrain(500, -500), -500), 0, 0, 0, 1);
 		
 		Camera camera = new Camera(player);
 		
@@ -80,12 +85,16 @@ public class MainLoop {
 		
 		GUIRenderer guiRenderer = new GUIRenderer(loader);
 		
+		//MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
+		
 		while(!Display.isCloseRequested()){
 			camera.move();
 			player.move(terrain);
+			//picker.update();
 			
 			renderer.processEntity(player);
-			renderer.processEntity(fern);
+			//renderer.processEntity(fern);
+			renderer.processPlanet(p);
 			renderer.processTerrain(terrain);
 			renderer.render(lights, camera);
 			//guiRenderer.render(guis);
